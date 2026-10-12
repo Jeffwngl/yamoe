@@ -102,7 +102,7 @@ export function startSelection(captureSelection: CaptureSelection) {
         };
 
         stopSelection();
-        if (selection.width < 4 || selection.height < 4) {
+        if (selection.width < 2 || selection.height < 2) {
             void showPopupAnimated('Select a larger region.');
             return;
         }
