@@ -29,16 +29,13 @@ request_lock = asyncio.Lock()
 # protect the shared model if a request is canceled during inference
 model_lock = threading.Lock()
 
-
 @asynccontextmanager
 async def lifespan(app):
     # uvicorn has configured logging by the time the server starts
     logger.info("Yomi Web OCR token: %s", OCR_TOKEN)
     yield
 
-
 app = FastAPI(lifespan=lifespan)
-
 
 async def read_request_body(receive):
     body = bytearray()
@@ -56,7 +53,6 @@ async def read_request_body(receive):
 
         if not message.get("more_body", False):
             return bytes(body)
-
 
 class OCRRequestMiddleware:
     # check authentication and size before FastAPI parses the uploaded file
@@ -86,7 +82,7 @@ class OCRRequestMiddleware:
             await response(scope, receive, send)
             return
 
-        if body is None:
+        if body == None:
             return
 
         # FastAPI still needs to receive the body that we already checked
@@ -108,9 +104,7 @@ class OCRRequestMiddleware:
 
         await self.app(scope, receive_body, send)
 
-
 app.add_middleware(OCRRequestMiddleware)
-
 
 def open_image(data, capture_mode):
     try:
@@ -142,7 +136,6 @@ def process_image(data, capture_mode):
     with open_image(data, capture_mode) as image:
         with model_lock:
             return detect_regions(image, capture_mode)
-
 
 @app.post("/ocr")
 async def ocr(image: Annotated[UploadFile, File()], captureMode: Annotated[CaptureMode, Form()]):

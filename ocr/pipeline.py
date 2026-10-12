@@ -154,8 +154,8 @@ def detect_regions(image: Image.Image, captureMode: CaptureMode):
 
     # performance debug
     if __debug__:
-        print("Manga OCR Total:", ocr_total, "seconds")
-        print("Manga OCR Individual:", ocr_total / len(regions), "seconds")
+        print("Text OCR Total:", ocr_total, "seconds")
+        print("Text OCR Individual:", ocr_total / len(regions), "seconds")
 
     return {
         "regions": regions,
