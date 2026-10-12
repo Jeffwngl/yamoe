@@ -4,14 +4,27 @@ from PIL import Image
 from manga_ocr import MangaOcr
 import numpy as np
 import cv2
+import sys
 
 from detector import detect_text
+from apple_vision import AppleVisionOCR
 
 # load the model once when the backend starts.
-mocr = MangaOcr()
+
+if sys.platform == "darwin":
+    ocr = AppleVisionOCR(
+        reading_order="vision",
+        language="ja-JP",
+        engine="visionkit",
+        debug=True,
+    )
+elif sys.platform == "win32":
+    ocr = MangaOcr()
+else:
+    raise RuntimeError("Unsupported operating system")
 
 def recognize_text(image):
-    return mocr(image)
+    return ocr(image)
 
 # image utils
 def pil_to_cv(image):
@@ -33,7 +46,7 @@ def detect_regions(image: Image.Image, captureMode: CaptureMode):
 
     image_width, image_height = image.size
 
-    if (image_height < 100 or image_width < 100):
+    if (image_height < 10 or image_width < 10):
         return {
             "regions": [],
             "reason": "Selected image size too small.",

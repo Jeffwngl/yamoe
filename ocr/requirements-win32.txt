@@ -6,5 +6,4 @@ manga-ocr
 # manga-ocr-torchless
 numpy
 opencv-python-headless
-# torch
-# torchvision
+torch
