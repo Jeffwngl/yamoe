@@ -25,6 +25,11 @@ export default defineContentScript({
         ctx.addEventListener(document, 'visibilitychange', () => {
             if (document.hidden) invalidate();
         });
+        ctx.addEventListener(window, 'keydown', (event) => {
+            if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+                invalidate();
+            }
+        });
         ctx.onInvalidated(invalidate);
 
         async function captureSelection(selection: Selection) {

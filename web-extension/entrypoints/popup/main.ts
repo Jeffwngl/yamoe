@@ -56,9 +56,9 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
         Help
     </label>
     <div id="help">
-        <p>Use Cmd/Crtl + shift + O to highlight text you want to process.</p>
-        <p>Use Cmd/Crtl + shift + X to delete all text.</p>
-        <p>Use Cmd/Ctrl + shift + Y to reselect previous region</p>
+        <p>Use Cmd/Crtl + shift + 1 to highlight text you want to process.</p>
+        <p>Use Cmd/Crtl + shift + Q to delete all text.</p>
+        <p>Use Cmd/Ctrl + shift + 3 to reselect previous region</p>
     </div>
   </div>
 `;

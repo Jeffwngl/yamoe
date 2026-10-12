@@ -10,22 +10,22 @@ export default defineConfig({
         commands: {
             'start-ocr': {
                 suggested_key: {
-                    default: 'Ctrl+Shift+O',
-                    mac: 'Command+Shift+O',
+                    default: 'Ctrl+Shift+1',
+                    mac: 'Command+Shift+1',
                 },
                 description: 'Start OCR selection',
             },
             'clear-ocr': {
                 suggested_key: {
-                    default: 'Ctrl+Shift+X',
-                    mac: 'Command+Shift+X',
+                    default: 'Ctrl+Shift+Q',
+                    mac: 'Command+Shift+Q',
                 },
                 description: 'Clear OCR overlays',
             },
             'reselect-region': {
                 suggested_key: {
-                    default: 'Ctrl+Shift+Y',
-                    mac: 'Command+Shift+Y',
+                    default: 'Ctrl+Shift+2',
+                    mac: 'Command+Shift+2',
                 },
                 description: 'Reselect previously selected region',
             },
