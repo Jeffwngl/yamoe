@@ -1,5 +1,5 @@
 import './style.css';
-import { getOCRToken, setOCRToken } from '@/src/settings';
+import { getOCRToken, getShowRegions, setOCRToken, setShowRegions } from '@/src/settings';
 import { getFontSize, setFontSize } from '@/src/settings';
 
 import {
@@ -38,6 +38,11 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
             White text / black outline
         </option>
     </select>
+
+    <label class="checkbox-row">
+        <span>Show detected regions:</span>
+        <input type="checkbox" id="show-detected-regions" />
+    </label>
 
     <label for="capture-mode">
         Capture mode
@@ -98,4 +103,12 @@ tokenInput.addEventListener('change', async () => {
     } catch (error) {
         console.error('Unable to save backend token:', error);
     }
+});
+
+// show detected regions
+const showDetectedRegions = document.querySelector<HTMLInputElement>('#show-detected-regions')!;
+
+showDetectedRegions.checked = await getShowRegions();
+showDetectedRegions.addEventListener('change', async () => {
+    await setShowRegions(showDetectedRegions.checked);
 });

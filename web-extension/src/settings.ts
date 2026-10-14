@@ -63,3 +63,14 @@ export async function getOCRToken(): Promise<string> {
 export async function setOCRToken(token: string): Promise<void> {
     await browser.storage.local.set({ ocrToken: token.trim() });
 }
+
+export async function getShowRegions(): Promise<boolean> {
+    const result = await browser.storage.local.get('showRegions');
+    return typeof result.showRegions === 'boolean' ? result.showRegions : true;
+}
+
+export async function setShowRegions(show: boolean): Promise<void> {
+    await browser.storage.local.set({
+        showRegions: show,
+    });
+}

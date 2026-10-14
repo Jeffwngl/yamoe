@@ -1,7 +1,7 @@
 import { startSelection, cropScreenshot, reselectSelection, cancelSelection } from '@/src/selection';
 import { showDetectedRegions, showOCRRegions, clearOCRRegions, showPopupAnimated } from '@/src/ui';
 import { sendToOCR, cancelOCR } from '@/src/client';
-import { getCaptureMode } from '@/src/settings';
+import { getCaptureMode, getShowRegions } from '@/src/settings';
 import type { Selection } from '@/lib/types';
 
 export default defineContentScript({
@@ -73,9 +73,10 @@ export default defineContentScript({
                 }
 
                 // settings reads are asynchronous, so rendering checks the operation again.
+                const showRegions = await getShowRegions();
                 await showOCRRegions(result.regions, selection, () => requestId === id);
 
-                if (requestId === id) {
+                if (requestId === id && showRegions) {
                     showDetectedRegions(result.regions, selection);
                 }
             } catch (error) {
