@@ -17,9 +17,9 @@ A Manga OCR extension built on Apple Silicon, the extension leverages Apple's na
 
 - Low memory usage: **~400 MB** (Apple Vision OCR) compared to **~1.8–2 GB** with MangaOCR.
 
-- Fast OCR: ~2 seconds per manga page on an M4 MacBook Air.  
+- Fast OCR: **~2** seconds per manga page on an M4 MacBook Air.  
 
-- Small download: **~225 MB** for the backend installation compared to **1-2 GB** normal Manga texte recognition OCR's.
+- Small download: **~225 MB** for the backend installation compared to **1-2 GB** normal Manga text recognition OCR's.
 
 For detailed performance comparisons, see the [Benchmarks](#performancebenchmarking) section.
 
@@ -300,5 +300,5 @@ Machine: Apple M4 (average across 6 pages)
 ## OCR Tools
 Manga OCR - [manga ocr](https://github.com/kha-white/manga-ocr)  
 Comic Text Detector - [comic text detector](https://github.com/zyddnys/manga-image-translator/releases/tag/beta-0.3)  
-Manga OCR torchless - [manga ocr torchless](https://github.com/liksunrice/manga-ocr-torchless)
+Manga OCR torchless - [manga ocr torchless](https://github.com/liksunrice/manga-ocr-torchless)  
 Apple Visionkit - [apple visionkit](https://developer.apple.com/documentation/visionkit)
