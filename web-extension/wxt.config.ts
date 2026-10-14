@@ -17,8 +17,8 @@ export default defineConfig({
             },
             'clear-ocr': {
                 suggested_key: {
-                    default: 'Ctrl+Shift+Q',
-                    mac: 'Command+Shift+Q',
+                    default: 'Ctrl+Shift+X',
+                    mac: 'Command+Shift+X',
                 },
                 description: 'Clear OCR overlays',
             },
