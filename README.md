@@ -1,13 +1,19 @@
-<div align="center">
-# yamoe
-*Yet Another Manga OCR Extension*  
 
-A **lightweight** web OCR tool to convert images to text, inspired by [Mokuro](https://github.com/kha-white/mokuro), [YomiNinja](https://github.com/matt-m-o/YomiNinja) and [Cloe](https://github.com/blueaxis/Cloe).
+<div align="center">
+
+# yamoe
+*Yet Another Manga OCR Extension*
+
+A **lightweight** browser-based OCR tool for converting manga images into selectable text.
+
+Inspired by [Mokuro](https://github.com/kha-white/mokuro), [YomiNinja](https://github.com/matt-m-o/YomiNinja), and [Cloe](https://github.com/blueaxis/Cloe).
+
 </div>
+
 
 ## About
 
-A Manga OCR extension built on Apple Silicon, the extension leverages Apple's native Vision framework to reduce resource usage compared to other engines.  
+A Manga OCR extension built on Apple Silicon, the extension leverages Apple's native Vision framework to reduce resource usage while remaining responsive.  
 
 - Low memory usage: ~400 MB compared to ~1.8–2 GB with MangaOCR.
 
@@ -19,7 +25,7 @@ For detailed performance comparisons, see the Benchmarks section.
 
 ## Background
 
-Yamoe was developed to simplify my workflow for learning Japanese through manga, particularly the process of extracting text from images for Yomitan lookups.  
+*Yamoe* was developed to simplify my workflow for learning Japanese through manga, particularly the process of extracting text from images for Yomitan lookups.  
 
 Existing tools like Mokuro and YomiNinja offer similar functionality, but don't quite fit my workflow. Mokuro focuses on local manga files, while YomiNinja provides a more general-purpose OCR solution with broader features and custom Yomichan integration.  
 
@@ -30,7 +36,15 @@ Development has primarily focused on macOS and Apple Silicon, reflecting my own 
 Currently, the default OCR engine for windows is Manga OCR, which is essentially the same functionality as other OCR apps, in this case, using another engine such as Cloe will give you similar results.
 
 ## Usage
+Yamoe uses on-demand OCR, allowing users to extract text only when needed rather than continuously processing the page.  
 
+1. Select a region: Use the OCR keyboard shortcut and drag to select an area of the page containing manga text.  
+
+2. Extract text: Yamoe detects and converts the text within the selected region into selectable HTML text, compatible with Yomitan.
+
+3. Reuse your selection: The selected region is cached for the current session, allowing you to trigger OCR again using a keyboard shortcut without manually selecting the area.  
+
+Clear results: Remove existing OCR overlays using the clear shortcut.
 - The text sits on a overlay layer above the webpage as HTML elements, you can easily use dictionaries such as [Yomitan](https://yomitan.wiki/) to look up words.
 - Yomi Web extracts text as DOM elements on the page, Yomitan and other browser dictionaries should be able to integrate seamlessly with it.
 
@@ -122,14 +136,14 @@ npm run dev
 - The pipeline requires running two fairly large ML models locally and is currently what users on windows will use, Comic Text Detector is used for detecting the bounding boxes of the text in a page and Manga OCR is used to extract the text in the bounding boxes.
 - Tweaking the input size parameter on the CTD model can be managed in `detector.py` (credit to [Comic Text Detector](https://github.com/dmMaze/comic-text-detector)). The original `onnx` file model uses a fixed input size of 1024, which produces the baseline performance shown above.
 - To retain the performance benefits of ONNX while experimenting with different input resolutions, additional ONNX models with fixed input sizes of 768 and 640 are used.
-<div align="center">
+
 Machine: Apple M4 (average across 6 pages)
 | Input Size | CTD time | MangaOCR time | Blocks |
 | --- | --- | --- | --- |
 | 1024 | 1.497s | 0.902s | 9.67 |
 | 768 | 0.787s | 0.930s | 9.33 |
 | 640 | 0.543s | 0.929s | 9.5 |
-</div>
+
 - I have found the 768 model currently provides the best overall balance between detection accuracy and performance. It produced results very similar to the original 1024 model while reducing CTD inference time from approximately 1.50 s to 0.79 s.
 - The 640 model is faster again, reducing CTD inference time to approximately 0.54 s, and still performs well on many pages. However, its reliability is more dependent on page layout, text size, and image quality, with smaller or more difficult text regions being more likely to be missed.
 - Interestingly, changing the CTD input resolution has very little effect on MangaOCR inference time. This is expected because the input size primarily affects the text-detection stage; MangaOCR still processes the resulting cropped text regions independently.
@@ -148,14 +162,14 @@ Machine: Apple M4 (average across 6 pages)
 
 ### CTD + Apple Vision OCR Performance
 - Benchmarks comparing Apple Vision and MangaOCR using Comic Text Detector (CTD) for text region detection. All timings are in seconds.
-<div align="center">
+
 | Metric | Apple Vision | MangaOCR |
 |---|---:|---:|
 | CTD Detection (avg) | 0.7704 | 0.7758 |
 | OCR Processing (avg) | 1.3718 | 2.2640 |
 | Text Blocks (avg) | 38.8 | 39.0 |
 | **Total Time (avg)** | **2.1422** | **3.0398** |
-</div>
+
 ## Development Updates
 - Currently, the install size is relatively large due to Manga OCR and Pytorch, Manga OCR needs pytorch in order to run the model, however, there are methods to run it torchless, the Manga OCR `onnx` model is around 400MB which is unavoidable unless another OCR model is chosen but we can decrease the install size which saves around 2GB.
 - I have considered using a (quantized version of Manga OCR)[https://huggingface.co/kimchireader/manga-ocr-onnx-q8], however, seeing that it only decreases the size of the model by around 200-300MB, I decided that It doesn't really affect the outcome so I will keep the original model.
@@ -174,5 +188,5 @@ Machine: Apple M4 (average across 6 pages)
 ## OCR Tools
 Manga OCR - [manga ocr](https://github.com/kha-white/manga-ocr)  
 Comic Text Detector - [comic text detector](https://github.com/zyddnys/manga-image-translator/releases/tag/beta-0.3)  
-https://github.com/zyddnys/manga-image-translator/releases/tag/beta-0.3
 Manga OCR torchless - [manga ocr torchless](https://github.com/liksunrice/manga-ocr-torchless)
+Apple Visionkit - [apple visionkit](https://developer.apple.com/documentation/visionkit)
