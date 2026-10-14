@@ -15,13 +15,13 @@ Inspired by [Mokuro](https://github.com/kha-white/mokuro), [YomiNinja](https://g
 
 A Manga OCR extension built on Apple Silicon, the extension leverages Apple's native Vision framework to reduce resource usage while remaining responsive.  
 
-- Low memory usage: ~400 MB compared to ~1.8–2 GB with MangaOCR.
+- Low memory usage: **~400 MB** (Apple Vision OCR) compared to **~1.8–2 GB** with MangaOCR.
 
 - Fast OCR: ~2 seconds per manga page on an M4 MacBook Air.  
 
-- Small download: ~225 MB for the backend installation compared to 1-2 GB for pipelines using manga OCR.
+- Small download: **~225 MB** for the backend installation compared to **1-2 GB** normal Manga texte recognition OCR's.
 
-For detailed performance comparisons, see the Benchmarks section.
+For detailed performance comparisons, see the [Benchmarks](#performancebenchmarking) section.
 
 ## Background
 
@@ -36,31 +36,41 @@ Development has primarily focused on macOS and Apple Silicon, reflecting my own 
 Currently, the default OCR engine for windows is Manga OCR, which is essentially the same functionality as other OCR apps, in this case, using another engine such as Cloe will give you similar results.
 
 ## Usage
-Yamoe uses on-demand OCR, allowing users to extract text only when needed rather than continuously processing the page.  
 
-1. Select a region: Use the OCR keyboard shortcut and drag to select an area of the page containing manga text.  
+Yamoe uses **on-demand OCR**, allowing you to extract text only when needed instead of continuously processing the page. Selected regions are cached for the current session, making it easy to perform OCR again as you read through manga pages.
 
-2. Extract text: Yamoe detects and converts the text within the selected region into selectable HTML text, compatible with Yomitan.
+### Getting Started
 
-3. Reuse your selection: The selected region is cached for the current session, allowing you to trigger OCR again using a keyboard shortcut without manually selecting the area.  
+1. **Select a region:** Press `Ctrl/Cmd + Shift + 1`, then drag to select the area containing manga text.
+2. **Extract text:** Wait for Yamoe to process the selected region. Recognised text will appear as selectable HTML overlays above the original image.
+3. **Look up words:** Hover over the extracted text to use browser dictionaries such as [Yomitan](https://yomitan.wiki/).
+4. **Reuse your selection:** Press `Ctrl/Cmd + Shift + 2` to perform OCR again on the previously selected region without having to drag a new selection.
 
-Clear results: Remove existing OCR overlays using the clear shortcut.
-- The text sits on a overlay layer above the webpage as HTML elements, you can easily use dictionaries such as [Yomitan](https://yomitan.wiki/) to look up words.
-- Yomi Web extracts text as DOM elements on the page, Yomitan and other browser dictionaries should be able to integrate seamlessly with it.
+![Yamoe Demo](public/demo.gif)
 
-![demo](public/demo.gif)
+### Keyboard Shortcuts
 
-Ctrl/Cmd + Shift + 1       |  Select region
-:-------------------------:|:-------------------------:
-![select](/public/cropped1.png)  |  ![process](/public/cropped2.png)
-- Then wait for the OCR to process the image.
-- `Ctrl/Cmd + Shift + Q` erases the processed texts.
-- `Ctrl/Cmd + Shift + 2` recaptures the previously captured region.
-- From here you can use Yomitan or other tools you have;
+| Shortcut | Action |
+|---|---|
+| `Ctrl/Cmd + Shift + 1` | Select a new region for OCR |
+| `Ctrl/Cmd + Shift + 2` | Reprocess the previously selected region |
+| `Ctrl/Cmd + Shift + Q` | Clear existing OCR overlays |
 
-![yomi](/public/yomi.png)
+### Example Workflow
 
-- On MacOS, it sometimes may capture the Furigana on the page and cause some incorrect text to appear, you can recapture the text using the text box selection mode to get a better translation.
+| Select a Region | Extract Text |
+|:---:|:---:|
+| ![Select region](public/cropped1.png) | ![OCR processing](public/cropped2.png) |
+
+Once processed, the recognised text is rendered as HTML elements directly over the manga image, enabling seamless integration with Yomitan and other browser-based dictionaries.
+
+![Yomitan Integration](public/yomi.png)
+
+### Tips
+
+**Furigana recognition (macOS):** Apple Vision may occasionally include furigana alongside the main text, leading to inaccurate OCR results. If this happens, switch to **Text Box selection mode** and capture a smaller region to improve recognition.
+
+**Reading multiple pages:** If the manga remains in the same position between pages, simply advance to the next page and press `Ctrl/Cmd + Shift + 2` to reuse your previous selection. No need to manually select the region again.
 
 ## Requirements
 
@@ -170,18 +180,18 @@ Machine: Apple M4 (average across 6 pages)
 | Text Blocks (avg) | 38.8 | 39.0 |
 | **Total Time (avg)** | **2.1422** | **3.0398** |
 
-## Development Updates
+## Development Updates/Ramblings
 - Currently, the install size is relatively large due to Manga OCR and Pytorch, Manga OCR needs pytorch in order to run the model, however, there are methods to run it torchless, the Manga OCR `onnx` model is around 400MB which is unavoidable unless another OCR model is chosen but we can decrease the install size which saves around 2GB.
 - I have considered using a (quantized version of Manga OCR)[https://huggingface.co/kimchireader/manga-ocr-onnx-q8], however, seeing that it only decreases the size of the model by around 200-300MB, I decided that It doesn't really affect the outcome so I will keep the original model.
-- I've added a trial run with Manga-OCR torchless, while it doesn't require torch or any large packages anymore significantly decreasing the install size, the time it takes for Manga OCR shot up from around 1 s to around 2.5 s through CPU inference with `force_cpu=True`, however, with `force_cpu=False`, the time taken is around 6 s, I might add this back so I can use it on my other laptop with no GPU.
+- I've added a trial run with Manga-OCR torchless, while it doesn't require torch or any large packages anymore significantly decreasing the install size, the time it takes for Manga OCR shot up from around 1 s to around 2.5 s through CPU inference with `force_cpu=True`, however, with `force_cpu=False`, the time taken is around 6 s, I might add this back later.
 - Manga OCR torchless doesn't implement KV caching which significantly increases inference time specifically when there are long regions of text, this is because the exported model doesn't expose a mechanism for KV caching.
-- Another benefit of smaller models also will have a smaller amount of weights needed to be uploaded into RAM.
-- I ran some tests with apple vision ocr, it doesn't seem to work well on vertical and manga text failing to detect text in regions where there is obviously text, I am still looking into a fast and small alternative to Manga OCR.
-- I have gotten Apple Vision OCR to work well now with CTD, the speeds are much faster compared to OCR and the RAM usage is also much lower.
+- Smaller OCR models also offer the advantage of reduced memory consumption, as fewer model weights need to be loaded into RAM which is why I wanted to look for alternatives to Manga OCR in the first place.
+- Initially tested Apple Vision OCR as a lightweight alternative to MangaOCR. Early results were unreliable, particularly with vertical Japanese text, where it frequently failed to recognise text in otherwise clear regions.
+- After further improvements to the Apple Vision pipeline and its integration with Comic Text Detector (CTD), recognition accuracy has improved substantially. Apple Vision now achieves faster OCR processing and significantly lower memory usage than the original MangaOCR implementation, making it the preferred engine on macOS.
 
 ## Future Updates
 
-- I would like to add the ability to tweak the text extraction OCR in the future, so far, it just uses Manga OCRS's fixed settings, I will also add the ability to choose between using Apple's Vision OCR as well.
+- I would like to add the ability to tweak the text extraction OCR in the future, so far, it just uses Manga OCR's fixed settings, I will also add the ability to choose between using Apple's Vision OCR as well.
 - I've heard that adding batch processing instead of individual passes is much better for ML models, I'll add this in a future update for text extraction.
 - So far, the only model I've found on windows which suits this project is Tesseract OCR, I'll try add this as well later.
 
