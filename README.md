@@ -121,17 +121,20 @@ The backend is distributed as a standalone executable, so there is no need to in
 
 ### 2. Install the Browser Extension
 
+Download and extract the ZIP corresponding to your browser.  
+
 **Chrome / Chromium**
 
-1. Open chrome://extensions.
+1. Open `chrome://extensions`.
 2. Enable Developer mode.
 3. Select Load unpacked and choose the extracted extension folder.
+4. Select the extracted extension folder containing `manifest.json`.
 
 **Firefox**
 
-1. Open about:debugging#/runtime/this-firefox.
+1. Open `about:debugging#/runtime/this-firefox`.
 2. Select Load Temporary Add-on.
-3. Choose the extension's manifest.json.
+3. Choose the extension's `manifest.json`.
 
 > Firefox temporary add-ons are removed when the browser restarts. For permanent installation, use a properly signed Firefox extension package.
 
