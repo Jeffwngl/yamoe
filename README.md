@@ -29,9 +29,9 @@ For detailed performance comparisons, see the [Benchmarks](#performancebenchmark
 
 Existing tools like Mokuro and YomiNinja offer similar functionality, but don't quite fit my workflow. Mokuro focuses on local manga files, while YomiNinja provides a more general-purpose OCR solution with broader features and custom Yomichan integration.  
 
-Yamoe instead focuses on lightweight, browser-native OCR, allowing users to select specific regions for text extraction and look up words directly with Yomitan, without continuous or whole-screen OCR. By favouring native OCR engines over heavier alternatives like MangaOCR, it aims to minimise memory usage and installation size.  
+Yamoe instead focuses on lightweight, browser-native OCR, allowing users to select specific regions for text extraction and look up words directly with Yomitan, without continuous or whole-screen OCR. It favours native OCR engines over heavier alternatives like MangaOCR to minimise memory usage and installation size.  
 
-Development has primarily focused on macOS and Apple Silicon, reflecting my own setup and allowing the use of Apple's native Vision framework without CUDA. Windows support is also being developed, broader support is planned for the future.  
+Development has primarily focused on macOS and Apple Silicon, as it is my current setup, but it also allows the use of Apple's native Vision framework. Windows support is also being developed, broader support is planned for the future.  
 
 Currently, the default OCR engine for windows is Manga OCR, which is essentially the same functionality as other OCR apps, in this case, using another engine such as Cloe will give you similar results.
 
@@ -119,6 +119,12 @@ The backend is distributed as a standalone executable, so there is no need to in
 
    Keep the backend running while using the extension.
 
+> Yamoe is currently distributed without Apple Developer ID signing or notarization. macOS may display a warning that it cannot verify the application.
+
+> If you trust the downloaded release, run `xattr -dr com.apple.quarantine /path/to/<Yamoe_Directory>` (replace `<Yamoe_Directory>` with actual location e.g. `~/Downloads/yamoe-backend`) and then run it like normal.
+
+> Alternatively, you can build from source.
+
 ### 2. Install the Browser Extension
 
 Download and extract the ZIP corresponding to your browser.  
@@ -184,7 +190,7 @@ chmod +x yamoe-backend
 
 **OCR not responding:** Check the backend terminal for error messages and ensure another application isn't already using the backend's port.
 
-## Development/Windows Install
+## Build from Source/Windows Install
 
 - The backend prints a randomly generated OCR token at startup. Copy it into the **Backend token** field in the extension popup. By default the token changes whenever the backend restarts, including development reloads. Set the `YOMI_OCR_TOKEN` environment variable to a strong random value before starting the backend if you want the token to persist across restarts. Reload the extension after updating its permissions.
 
@@ -199,7 +205,7 @@ cd yamoe
 ```
 cd ocr
 build.sh
-python -O backend.py
+python -O run_backend.py
 ```
 - You will find a OCR token as output, copy this to clipboard as this will be used later.
 3. Build and run frontend.
