@@ -94,7 +94,7 @@ Screen Selected Image -> Comic Text Detector -> Manga OCR/Apple Vision OCR -> Di
 ```
 - This project uses separate pipeline objects from Mokuro's singular Comic Text Detector to Manga OCR model/Apple Vision OCR, this is done to experiment and benchmark different OCR models.
 
-## Installation
+## MacOS Install
 
 Yamoe consists of two components: a **browser extension** and a **local OCR backend**. Both are required for the application to function.
 
@@ -130,17 +130,17 @@ The backend is distributed as a standalone executable, so there is no need to in
 Download and extract the ZIP corresponding to your browser.  
 
 **Chrome / Chromium**
-
+*yamoe-0.1.0-chrome.zip*
 1. Open `chrome://extensions`.
-2. Enable Developer mode.
-3. Select Load unpacked and choose the extracted extension folder.
-4. Select the extracted extension folder containing `manifest.json`.
+2. Enable Developer mode (top right of browser).
+3. Select Load unpacked (top left) and choose the extracted extension folder.
+4. Select the extracted extension folder containing `manifest.json`, i.e. choose the `yamoe-0.1.0-chrome` folder.
 
 **Firefox**
-
+*yamoe-0.1.0-firefox.zip*
 1. Open `about:debugging#/runtime/this-firefox`.
 2. Select Load Temporary Add-on.
-3. Choose the extension's `manifest.json`.
+3. Choose the extension's `manifest.json` inside `yamoe-0.1.0-firefox`.
 
 > Firefox temporary add-ons are removed when the browser restarts. For permanent installation, use a properly signed Firefox extension package.
 
@@ -148,11 +148,10 @@ Download and extract the ZIP corresponding to your browser.
 
 Yamoe uses token-based authentication to communicate securely with its local OCR server.
 
-1. Start the backend executable.
-2. Copy the authentication token displayed in the terminal.
-3. Open the Yamoe extension popup.
-4. Paste the token into the **Backend Token** field.
-5. Save the token.
+1. Copy the authentication token displayed in the terminal (listed as `Yomi Web OCR token`).
+2. Open the Yamoe extension popup.
+3. Paste the token into the **Backend Token** field.
+4. Save the token.
 
 The extension can now communicate with the local OCR backend.
 
@@ -191,24 +190,22 @@ chmod +x yamoe-backend
 **OCR not responding:** Check the backend terminal for error messages and ensure another application isn't already using the backend's port.
 
 ## Build from Source/Windows Install
-
-- The backend prints a randomly generated OCR token at startup. Copy it into the **Backend token** field in the extension popup. By default the token changes whenever the backend restarts, including development reloads. Set the `YOMI_OCR_TOKEN` environment variable to a strong random value before starting the backend if you want the token to persist across restarts. Reload the extension after updating its permissions.
-
+- Note that on Windows, I have not found a suitable alternative to Apple Vision OCR, the application uses Manga OCR which contains and extra 400MB of model data which needs to be downloaded, as well as other large dependencies such as `pytorch`. I will try replace this with a alternative in the future such as `tesseract`.
 1. Clone the repo.
 ```
 git clone https://github.com/Jeffwngl/yamoe.git
 cd yamoe
 ```
 
-2. Build and run backend.
-- Note that on Windows, the application uses Manga OCR which contains and extra 400MB of model data which needs to be downloaded, as well as other large dependencies such as `pytorch`. I will try replace this with a alternative in the future such as `tesseract`.
+1. Build and run backend.
+
 ```
 cd ocr
 build.sh
 python -O run_backend.py
 ```
 - You will find a OCR token as output, copy this to clipboard as this will be used later.
-3. Build and run frontend.
+1. Build and run frontend.
 ```
 cd ..
 cd web-extension
@@ -216,7 +213,7 @@ npm install
 npm run dev
 ```
 
-4. Load extension.
+1. Load extension.
 
 **Chrome / Chromium:**
 
